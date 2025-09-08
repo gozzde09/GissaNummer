@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
+﻿
 namespace GuessNumberGameApp
 {
   internal class HandleHighScore
@@ -12,7 +9,7 @@ namespace GuessNumberGameApp
     {
       try
       {
-        using (StreamWriter writer = new StreamWriter(filePath, true)) // true = append
+        using (StreamWriter writer = new StreamWriter(filePath, true)) // Öppna filen, true = append
         {
           foreach (Score s in scores)
           {
@@ -34,10 +31,12 @@ namespace GuessNumberGameApp
       if (!File.Exists(filePath))
         return scores;
 
+      // Läsa filen
       using (StreamReader reader = new StreamReader(filePath))
       {
         string line;
-        while ((line = reader.ReadLine()) != null)
+        // Null-forgiving operator ! används för att indikera att vi vet att ReadLine inte returnerar null här
+        while ((line = reader.ReadLine()!) != null)
         {
           string[] parts = line.Split(';');
           if (parts.Length == 2 && int.TryParse(parts[1], out int attempts))

@@ -6,7 +6,7 @@
     private Score gameScore;
     private HandleHighScore saveScoreList;
 
-    public GuessNumberGame()
+    public GuessNumberGame() // Konstruktor
     {
       gameScore = new Score();
       saveScoreList = new HandleHighScore();
@@ -19,7 +19,7 @@
       List<Score> scores = new List<Score>();
       Random random = new Random();
 
-      while (runGame)
+      if (runGame)
       {
         int numberToGuess = random.Next(1, 101);
         int guess;
@@ -31,7 +31,7 @@
         while (!correct)
         {
           Console.Write("Din gissning: ");
-          string input = Console.ReadLine();
+          string? input = Console.ReadLine();
 
           if (!int.TryParse(input, out guess))
           {
@@ -49,25 +49,34 @@
           {
             Console.WriteLine($"🎉 Rätt gissat! Du har gjort {attempts} antal gissningar.");
             Console.Write("Vad heter du? ");
-            string name = Console.ReadLine();
+            string? name = Console.ReadLine();
 
-            gameScore = new Score(name, attempts);
+            gameScore = new Score(name!, attempts);
             scores.Add(gameScore);
 
             correct = true;
           }
         }
 
-        Console.WriteLine("Vill du spela igen? (Y/N)");
-        answer = Console.ReadLine();
+        // Fråga om man vill spela igen
+        Console.WriteLine("\nTryck på Y för att spela igen eller på en annan knapp för att avsluta:");
+        // Svar - nullable string
+        string? inputAnswer = Console.ReadLine();
+        answer = inputAnswer ?? string.Empty;
         runGame = WillPlay(answer);
       }
+      else
+      {
+        // Om användaren svarar nej direkt
+        Console.WriteLine("Okej, vi ses nästa gång! 🎲");
+      }
 
+      // Spara resultaten
       if (scores.Count > 0)
       {
         bool saved = saveScoreList.SaveHighScore(scores);
         if (saved)
-          Console.WriteLine("✅ Dina resultat har sparats.");
+          Console.WriteLine("✅ Ditt resultat har sparats. Välkommen igen!");
         else
           Console.WriteLine("❌ Något gick fel vid sparning.");
       }
@@ -75,7 +84,7 @@
 
     private bool WillPlay(string answer)
     {
-      return answer.ToLower() == "Y";
+      return answer.ToUpper() == "Y"; // både Y och y accepteras
     }
   }
 }

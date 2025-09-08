@@ -4,16 +4,16 @@ namespace GuessNumberGameApp
 {
   internal class UI
   {
-    private HandleHighScore scoreList;
-    private List<Score> scores;
+    private HandleHighScore scoreList; 
+    private List<Score> scores; 
 
-    public UI()
-    {
-      scoreList = new HandleHighScore();
-      scores = new List<Score>();
+    public UI() // Konstructor
+    { 
+      scoreList = new HandleHighScore(); 
+      scores = new List<Score>(); 
     }
 
-    public string DrawUI()
+    public string DrawUI() // Show messages and return answer
     {
       Console.WriteLine("🎲 Välkommen till Gissa Nummer!");
       Console.WriteLine("====================================");
@@ -27,16 +27,25 @@ namespace GuessNumberGameApp
       }
       else
       {
-        Console.WriteLine("Highscore-lista:");
+        Console.WriteLine("\n Highscores-lista:");
+        int index = 1; 
         foreach (Score s in scores)
         {
-          Console.WriteLine($"{s.PlayerName} - {s.Attempts} gissningar");
+          Console.WriteLine($"{index}. {s.PlayerName} - {s.Attempts} gissningar");
+          index++; 
         }
       }
 
-      Console.WriteLine("\nVill du spela? (ja/nej)");
-      string answer = Console.ReadLine();
-      return answer;
+      Console.WriteLine("\nTryck på Y för att spela eller på en annan knapp för att avsluta:");
+
+      // Svar - nullable string
+      string? answer = Console.ReadLine();
+      return answer ?? string.Empty;  // Om svar är null, returnera tom sträng
+
+      // *** Alternativt utan null-coalescing operator ***
+      // string? answer = Console.ReadLine();
+      // return answer!;
+
     }
   }
 }
